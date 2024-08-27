@@ -21,8 +21,8 @@ Feature: Fixer API Timeseries Endpoint
   @negative @status400
   Scenario: Request timeseries data with missing required parameters
     When a GET request is sent to the timeseries endpoint with the following parameters:
-      | end_date   | start_date |
-      | 2023-01-10 |            |
+      | end_date   |
+      | 2023-01-10 |
     Then the API response should have status code 400
 
   @negative @status401
