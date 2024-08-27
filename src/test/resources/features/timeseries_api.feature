@@ -23,7 +23,7 @@ Feature: Fixer API Timeseries Endpoint
     Examples: Without specifying base
       | start_date | end_date   | base | symbols |
       | 2023-01-01 | 2023-01-10 |      | USD     |
-    Examples: With the maximum allowed date range
+    Examples: With multiple symbols
       | start_date | end_date   | base | symbols     |
       | 2023-01-01 | 2023-01-10 | EUR  | USD,GBP,JPY |
     Examples: Date range equals 365 days
