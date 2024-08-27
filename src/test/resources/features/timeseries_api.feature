@@ -19,53 +19,33 @@ Feature: Fixer API Timeseries Endpoint
     Then the API response should have status code 200
 
   @negative @status400
-  Scenario: Request timeseries data with missing required parameters
+  Scenario Outline: Request timeseries data with invalid parameters
     When a GET request is sent to the timeseries endpoint with the following parameters:
-      | end_date   |
-      | 2023-01-10 |
+      | start_date   | end_date   | base   | symbols   |
+      | <start_date> | <end_date> | <base> | <symbols> |
     Then the API response should have status code 400
 
-  @negative @status400
-  Scenario: Request timeseries data with invalid date format
-    When a GET request is sent to the timeseries endpoint with the following parameters:
-      | start_date | end_date   |
-      | 01-01-2023 | 10-01-2023 |
-    Then the API response should have status code 400
-
-  @negative @status400
-  Scenario: Request timeseries data with special characters in parameters
-    When a GET request is sent to the timeseries endpoint with the following parameters:
+    Examples: Missing required parameters
+      | start_date | end_date   | base | symbols |
+      |            | 2023-01-10 |      |         |
+    Examples: Invalid date format
+      | start_date | end_date   | base | symbols |
+      | 01-01-2023 | 10-01-2023 |      |         |
+    Examples: Special characters in parameters
       | start_date | end_date   | base | symbols |
       | 2023-01-01 | 2023-01-10 | @#$% | ^&*()   |
-    Then the API response should have status code 400
-
-  @negative @status400
-  Scenario: Request timeseries data with overlapping date range
-    When a GET request is sent to the timeseries endpoint with the following parameters:
+    Examples: Overlapping date range
       | start_date | end_date   | base | symbols |
       | 2023-01-10 | 2023-01-01 | EUR  | USD     |
-    Then the API response should have status code 400
-
-  @negative @status400
-  Scenario: Request timeseries data with a date range exceeding 365 days
-    When a GET request is sent to the timeseries endpoint with the following parameters:
-      | start_date | end_date   |
-      | 2021-01-01 | 2023-01-01 |
-    Then the API response should have status code 400
-
-  @negative @status400
-  Scenario: Request timeseries data with mixed valid and invalid parameters
-    When a GET request is sent to the timeseries endpoint with the following parameters:
+    Examples: Date range exceeding 365 days
+      | start_date | end_date   | base | symbols |
+      | 2021-01-01 | 2023-01-01 |      |         |
+    Examples: Mixed valid and invalid parameters
       | start_date | end_date   | base | symbols |
       | 2023-01-01 | 2023-01-10 | EUR  | INVALID |
-    Then the API response should have status code 400
-
-  @negative @status400
-  Scenario: Request timeseries data with no parameters
-    When a GET request is sent to the timeseries endpoint with the following parameters:
-      |  |
-      |  |
-    Then the API response should have status code 400
+    Examples: No parameters
+      | start_date | end_date   | base | symbols |
+      |            |            |      |         |
 
   @negative @status401
   Scenario: Request timeseries data with an invalid API key
