@@ -33,6 +33,14 @@ Feature: Fixer API Timeseries Endpoint
       | 2023-01-01 | 2023-01-10 |
     Then the API response should have status code 401
 
+  @negative @status401
+  Scenario: Request timeseries data without an API key
+    Given no API key is provided
+    When a GET request is sent to the timeseries endpoint with the following parameters:
+      | start_date | end_date   | base | symbols |
+      | 2023-01-01 | 2023-01-10 | EUR  | USD     |
+    Then the API response should have status code 401
+
   @ignore @negative @status403
   Scenario: Access timeseries endpoint after subscription cancellation
     # This test should be run manually after the subscription is canceled or create a separate account without subscription.

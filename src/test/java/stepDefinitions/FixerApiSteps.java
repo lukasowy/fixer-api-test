@@ -32,6 +32,8 @@ public class FixerApiSteps implements En {
 
         Given("a valid API key is provided", apiConfigManager::setValidApiKey);
 
+        Given("no API key is provided", apiConfigManager::clearApiKey);
+
         Given("an invalid API key is provided", apiConfigManager::setInvalidApiKey);
 
         When("a GET request is sent to the timeseries endpoint with the following parameters:", this::handleGetRequestWithParams);

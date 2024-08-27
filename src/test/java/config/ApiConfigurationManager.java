@@ -22,4 +22,8 @@ public class ApiConfigurationManager {
     public void setInvalidApiKey() {
         apiConfiguration.setApiKey("INVALID_API_KEY");
     }
+
+    public void clearApiKey() {
+        apiConfiguration.setApiKey(null);
+    }
 }

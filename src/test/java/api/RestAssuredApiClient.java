@@ -13,16 +13,21 @@ public class RestAssuredApiClient {
     private final ApiConfiguration apiConfiguration;
 
     public Response sendGetRequest(String endpoint, Map<String, String> queryParams) {
-        return RestAssured.given()
+        var requestSpec = RestAssured.given()
                 .baseUri(apiConfiguration.getBaseUrl())
-                .when()
                 .basePath(endpoint)
                 .queryParams(queryParams)
-                .log().all()
-                .header("apikey", apiConfiguration.getApiKey())
+                .log().all();
+
+        if (apiConfiguration.getApiKey() != null) {
+            requestSpec.header("apikey", apiConfiguration.getApiKey());
+        }
+
+        return requestSpec
+                .when()
                 .get()
                 .then()
-                .log().everything()
+                .log().ifError()
                 .extract().response();
     }
 }
