@@ -5,18 +5,30 @@ Feature: Fixer API Timeseries Endpoint
     Given a valid API key is provided
 
   @positive @status200
-  Scenario: Retrieve timeseries data with only required parameters
+  Scenario Outline: Retrieve timeseries data with different combinations of parameters
     When a GET request is sent to the timeseries endpoint with the following parameters:
-      | start_date | end_date   |
-      | 2023-01-01 | 2023-01-10 |
+      | start_date   | end_date   | base   | symbols   |
+      | <start_date> | <end_date> | <base> | <symbols> |
     Then the API response should have status code 200
 
-  @positive @status200
-  Scenario: Retrieve timeseries data with all parameters
-    When a GET request is sent to the timeseries endpoint with the following parameters:
+    Examples: Only required parameters
+      | start_date | end_date   | base | symbols |
+      | 2023-01-01 | 2023-01-10 |      |         |
+    Examples: All parameters provided
       | start_date | end_date   | base | symbols |
       | 2023-01-01 | 2023-01-10 | EUR  | USD     |
-    Then the API response should have status code 200
+    Examples: Without specifying symbols
+      | start_date | end_date   | base | symbols |
+      | 2023-01-01 | 2023-01-10 | EUR  |         |
+    Examples: Without specifying base
+      | start_date | end_date   | base | symbols |
+      | 2023-01-01 | 2023-01-10 |      | USD     |
+    Examples: With the maximum allowed date range
+      | start_date | end_date   | base | symbols     |
+      | 2023-01-01 | 2023-01-10 | EUR  | USD,GBP,JPY |
+    Examples: Date range equals 365 days
+      | start_date | end_date   | base | symbols |
+      | 2022-01-01 | 2023-01-01 | EUR  | USD     |
 
   @negative @status400
   Scenario Outline: Request timeseries data with invalid parameters
@@ -44,8 +56,8 @@ Feature: Fixer API Timeseries Endpoint
       | start_date | end_date   | base | symbols |
       | 2023-01-01 | 2023-01-10 | EUR  | INVALID |
     Examples: No parameters
-      | start_date | end_date   | base | symbols |
-      |            |            |      |         |
+      | start_date | end_date | base | symbols |
+      |            |          |      |         |
 
   @negative @status401
   Scenario: Request timeseries data with an invalid API key
