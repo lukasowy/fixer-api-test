@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Map;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toMap;
-
 @Slf4j
 @RequiredArgsConstructor
 public class ApiRequestHandler {
@@ -24,7 +22,8 @@ public class ApiRequestHandler {
         Response response = apiClient.sendGetRequest(endpoint, queryParams);
 
         final int[] nullCount = {0};
-        int remainingLimit = Optional.ofNullable(response.getHeader("RateLimit-Remaining"))
+        int remainingLimit = Optional.ofNullable(
+                        response.getHeader("RateLimit-Remaining"))
                 .map(Integer::parseInt)
                 .orElse(Integer.MAX_VALUE);
 
@@ -36,7 +35,8 @@ public class ApiRequestHandler {
                 break;
             }
 
-            remainingLimit = Optional.ofNullable(response.getHeader("RateLimit-Remaining"))
+            remainingLimit = Optional.ofNullable(
+                            response.getHeader("RateLimit-Remaining"))
                     .map(Integer::parseInt)
                     .orElseGet(() -> {
                         nullCount[0]++;
