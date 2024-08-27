@@ -32,6 +32,13 @@ Feature: Fixer API Timeseries Endpoint
       | 01-01-2023 | 10-01-2023 |
     Then the API response should have status code 400
 
+  @negative @status400
+  Scenario: Request timeseries data with special characters in parameters
+    When a GET request is sent to the timeseries endpoint with the following parameters:
+      | start_date | end_date   | base | symbols |
+      | 2023-01-01 | 2023-01-10 | @#$% | ^&*()   |
+    Then the API response should have status code 400
+
   @negative @status401
   Scenario: Request timeseries data with an invalid API key
     Given an invalid API key is provided
