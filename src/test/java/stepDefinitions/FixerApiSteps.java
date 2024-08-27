@@ -46,7 +46,7 @@ public class FixerApiSteps implements En {
     private void handleGetRequestWithParams(DataTable dataTable) {
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         Map<String, String> queryParams = rows.get(0);
-        response = apiRequestHandler.sendGetRequestWithFilteredParams("/timeseries", queryParams);
+        response = apiRequestHandler.sendGetRequest("/timeseries", queryParams);
     }
 
     private void handleMultipleRequests(DataTable dataTable) {

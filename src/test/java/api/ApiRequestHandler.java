@@ -16,12 +16,8 @@ public class ApiRequestHandler {
     private static final int MAX_RETRIES = 10;
     private final RestAssuredApiClient apiClient;
 
-    public Response sendGetRequestWithFilteredParams(String endpoint, Map<String, String> queryParams) {
-        Map<String, String> filteredQueryParams = queryParams.entrySet().stream()
-                .filter(entry -> entry.getValue() != null && !entry.getValue().isEmpty())
-                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-        return apiClient.sendGetRequest(endpoint, filteredQueryParams);
+    public Response sendGetRequest(String endpoint, Map<String, String> queryParams) {
+        return apiClient.sendGetRequest(endpoint, queryParams);
     }
 
     public void sendMultipleRequests(String endpoint, Map<String, String> queryParams) {
