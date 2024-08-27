@@ -46,6 +46,13 @@ Feature: Fixer API Timeseries Endpoint
       | 2023-01-10 | 2023-01-01 | EUR  | USD     |
     Then the API response should have status code 400
 
+  @negative @status400
+  Scenario: Request timeseries data with a date range exceeding 365 days
+    When a GET request is sent to the timeseries endpoint with the following parameters:
+      | start_date | end_date   |
+      | 2021-01-01 | 2023-01-01 |
+    Then the API response should have status code 400
+
   @negative @status401
   Scenario: Request timeseries data with an invalid API key
     Given an invalid API key is provided
