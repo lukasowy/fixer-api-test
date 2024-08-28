@@ -11,23 +11,19 @@ Feature: Fixer API Timeseries Endpoint
       | <start_date> | <end_date> | <base> | <symbols> |
     Then the API response should have status code 200
 
-    Examples: Only required parameters
+    Examples:
       | start_date | end_date   | base | symbols |
+    # Only required parameters
       | 2023-01-01 | 2023-01-10 |      |         |
-    Examples: All parameters provided
-      | start_date | end_date   | base | symbols |
+    # All parameters provided
       | 2023-01-01 | 2023-01-10 | EUR  | USD     |
-    Examples: Without specifying symbols
-      | start_date | end_date   | base | symbols |
+    # Without specifying symbols
       | 2023-01-01 | 2023-01-10 | EUR  |         |
-    Examples: Without specifying base
-      | start_date | end_date   | base | symbols |
+    # Without specifying base
       | 2023-01-01 | 2023-01-10 |      | USD     |
-    Examples: With multiple symbols
-      | start_date | end_date   | base | symbols     |
+    # With multiple symbols
       | 2023-01-01 | 2023-01-10 | EUR  | USD,GBP,JPY |
-    Examples: Date range equals 365 days
-      | start_date | end_date   | base | symbols |
+    # Date range equals 365 days
       | 2022-01-01 | 2023-01-01 | EUR  | USD     |
 
   @negative @status400
@@ -37,26 +33,21 @@ Feature: Fixer API Timeseries Endpoint
       | <start_date> | <end_date> | <base> | <symbols> |
     Then the API response should have status code 400
 
-    Examples: Missing required parameters
+    Examples:
       | start_date | end_date   | base | symbols |
+    # Missing required parameters
       |            | 2023-01-10 |      |         |
-    Examples: Invalid date format
-      | start_date | end_date   | base | symbols |
+    # Invalid date format
       | 01-01-2023 | 10-01-2023 |      |         |
-    Examples: Special characters in parameters
-      | start_date | end_date   | base | symbols |
+    # Special characters in parameters
       | 2023-01-01 | 2023-01-10 | @#$% | ^&*()   |
-    Examples: Overlapping date range
-      | start_date | end_date   | base | symbols |
+    # Overlapping date range
       | 2023-01-10 | 2023-01-01 | EUR  | USD     |
-    Examples: Date range exceeding 365 days
-      | start_date | end_date   | base | symbols |
+    # Date range exceeding 365 days
       | 2021-01-01 | 2023-01-01 |      |         |
-    Examples: Mixed valid and invalid parameters
-      | start_date | end_date   | base | symbols |
+    # Mixed valid and invalid parameters
       | 2023-01-01 | 2023-01-10 | EUR  | INVALID |
-    Examples: No parameters
-      | start_date | end_date | base | symbols |
+    # No parameters
       |            |          |      |         |
 
   @negative @status401
