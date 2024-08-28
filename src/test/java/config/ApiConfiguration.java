@@ -1,16 +1,12 @@
 package config;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
 public class ApiConfiguration {
 
     private ApiKey apiKey;
     private BaseUrl baseUrl;
 
     public String getBaseUrl() {
-        return baseUrl.getUrl();
+        return baseUrl.url();
     }
 
     public void setBaseUrl(String baseUrl) {
@@ -18,22 +14,14 @@ public class ApiConfiguration {
     }
 
     public String getApiKey() {
-        return apiKey.getKey();
+        return apiKey.key();
     }
 
     public void setApiKey(String apiKey) {
         this.apiKey = new ApiKey(apiKey);
     }
 
-    @Getter
-    @RequiredArgsConstructor
-    public static class ApiKey {
-        private final String key;
-    }
+    public record ApiKey(String key) {}
 
-    @Getter
-    @RequiredArgsConstructor
-    public static class BaseUrl {
-        private final String url;
-    }
+    public record BaseUrl(String url) {}
 }
