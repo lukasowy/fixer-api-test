@@ -5,53 +5,40 @@ Feature: Fixer API Timeseries Endpoint
     Given a valid API key is provided
 
   @positive @status200
-  Scenario Outline: Retrieve timeseries data with different combinations of parameters
+  Scenario Outline: Retrieve timeseries data with valid parameters
     When a GET request is sent to the timeseries endpoint with the following parameters:
       | start_date   | end_date   | base   | symbols   |
       | <start_date> | <end_date> | <base> | <symbols> |
     Then the API response should have status code 200
 
     Examples:
-      | start_date | end_date   | base | symbols |
-    # Only required parameters
-      | 2023-01-01 | 2023-01-10 |      |         |
-    # All parameters provided
-      | 2023-01-01 | 2023-01-10 | EUR  | USD     |
-    # Without specifying symbols
-      | 2023-01-01 | 2023-01-10 | EUR  |         |
-    # Without specifying base
-      | 2023-01-01 | 2023-01-10 |      | USD     |
-    # With multiple symbols
-      | 2023-01-01 | 2023-01-10 | EUR  | USD,GBP,JPY |
-    # Date range equals 365 days
-      | 2022-01-01 | 2023-01-01 | EUR  | USD     |
+      | start_date | end_date   | base | symbols     | # Scenario Description
+      | 2023-01-01 | 2023-01-10 |      |             | # Only required parameters
+      | 2023-01-01 | 2023-01-10 | EUR  | USD         | # All parameters provided
+      | 2023-01-01 | 2023-01-10 | EUR  |             | # Without specifying symbols
+      | 2023-01-01 | 2023-01-10 |      | USD         | # Without specifying base
+      | 2023-01-01 | 2023-01-10 | EUR  | USD,GBP,JPY | # Multiple symbols
+      | 2022-01-01 | 2023-01-01 | EUR  | USD         | # Date range equals 365 days
 
   @negative @status400
-  Scenario Outline: Request timeseries data with invalid parameters
+  Scenario Outline: Handle invalid parameters when requesting timeseries data
     When a GET request is sent to the timeseries endpoint with the following parameters:
       | start_date   | end_date   | base   | symbols   |
       | <start_date> | <end_date> | <base> | <symbols> |
     Then the API response should have status code 400
 
     Examples:
-      | start_date | end_date   | base | symbols |
-    # Missing required parameters
-      |            | 2023-01-10 |      |         |
-    # Invalid date format
-      | 01-01-2023 | 10-01-2023 |      |         |
-    # Special characters in parameters
-      | 2023-01-01 | 2023-01-10 | @#$% | ^&*()   |
-    # Overlapping date range
-      | 2023-01-10 | 2023-01-01 | EUR  | USD     |
-    # Date range exceeding 365 days
-      | 2021-01-01 | 2023-01-01 |      |         |
-    # Mixed valid and invalid parameters
-      | 2023-01-01 | 2023-01-10 | EUR  | INVALID |
-    # No parameters
-      |            |          |      |         |
+      | start_date | end_date   | base | symbols | # Scenario Description
+      |            | 2023-01-10 |      |         | # Missing required parameters
+      | 01-01-2023 | 10-01-2023 |      |         | # Invalid date format
+      | 2023-01-01 | 2023-01-10 | @#$% | ^&*()   | # Special characters in parameters
+      | 2023-01-10 | 2023-01-01 | EUR  | USD     | # Overlapping date range
+      | 2021-01-01 | 2023-01-01 |      |         | # Date range exceeding 365 days
+      | 2023-01-01 | 2023-01-10 | EUR  | INVALID | # Mixed valid and invalid parameters
+      |            |            |      |         | # No parameters
 
   @negative @status401
-  Scenario: Request timeseries data with an invalid API key
+  Scenario: Reject request with an invalid API key
     Given an invalid API key is provided
     When a GET request is sent to the timeseries endpoint with the following parameters:
       | start_date | end_date   |
@@ -59,7 +46,7 @@ Feature: Fixer API Timeseries Endpoint
     Then the API response should have status code 401
 
   @negative @status401
-  Scenario: Request timeseries data without an API key
+  Scenario: Reject request without an API key
     Given no API key is provided
     When a GET request is sent to the timeseries endpoint with the following parameters:
       | start_date | end_date   | base | symbols |
@@ -83,9 +70,8 @@ Feature: Fixer API Timeseries Endpoint
 
   @ignore @negative @status429
   Scenario: Exceed API rate limit and receive a 429 response
-  # This test should be run separately to avoid consuming all the API requests.
+    # This test should be run separately to avoid consuming all the API requests.
     When GET requests are sent until the rate limit is reached with the following parameters:
       | start_date | end_date   |
       | 2023-01-01 | 2023-01-10 |
     Then the API response should have status code 429
-
